@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Party and Candidate Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>All Party and Candidate Details</h1>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Party Name</th>
+                        <th>Symbol</th>
+                        <th>Candidate Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                        <tr>
+                            <td rowspan="1"><?php echo $row['party_name']; ?></td>
+                            <td rowspan="1"><?php echo $row['symbol']; ?></td>
+                            <td><?php echo $row['candidate_name'] ? $row['candidate_name'] : 'No Candidates'; ?></td>
+                        </tr>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="2"></td> <!-- Empty columns for party name and symbol -->
+                            <td><?php echo $row['candidate_name'] ? $row['candidate_name'] : 'No Candidates'; ?></td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No party or candidate details found.</p>
+        <?php endif; ?>
+
+        <button onclick="window.history.back()">Go Back</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter ID Validation</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            Margin: 0;
+            background-color: #f0f8ff;
+            background-image: url('k.jpg');
+            background-size: cover;
+            background-position: center;
+           
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #1c64f2;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #1c64f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1554c0;
+        }
+
+        .error, .success {
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            label {
+                font-size: 1rem;
+            }
+
+            input[type="text"] {
+                font-size: 0.9rem;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Validate Your Voter ID</h1>
+        <p>Please enter your Voter ID to proceed with registration</p>
+
+        <form id="voterIdForm" method="POST" action="create.html">
+            <label for="voterId">Voter ID</label>
+            <input type="text" id="voterId" name="voterId" placeholder="Enter your Voter ID" required>
+            <div id="voterIdError" class="error"></div>
+            <div id="voterIdSuccess" class="success"></div>
+
+            <button type="submit">Validate Voter ID</button>
+        </form>
+
+        <div class="footer">
+            <p>&copy; 2024 Election Commission of India</p>
+        </div>
+    </div>
+
+</body>
+</html>

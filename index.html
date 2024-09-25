@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VOTING SYSTEM</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            background-image: url('download.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(10px); /* Adjust the blur intensity */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1; /* Keeps the image behind other content */
+        }
+
+        form {
+            margin: 200px;
+            padding: 100px;
+        }
+
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 48px;
+            background: linear-gradient(90deg, #FF9933, white, #138808);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        button {
+            background: linear-gradient(90deg, #ff9933, #138808);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>
+            <span style="color: #FF9933;">Election</span>
+            <span style="color: navy;">Commission</span>
+            <span style="color: #138808;">of India</span>
+        </h1>
+        
+        <br><br><b><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <button type="button" onclick="window.location.href='user.html'">Voter Login</button><br><br>
+        <button type="button" onclick="window.location.href='adlog.html'">EC Login</button>
+    </center>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://example.com/indian_flag_background.jpg');
+            background-size: cover;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1c64f2;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #1c64f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1554c0;
+        }
+
+        .error, .success {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="voterIdSection" class="container">
+        <h1>Validate Voter ID</h1>
+        <form id="voterIdForm" method="POST" action="voterid_auth.php">
+            <label for="voterId">Voter ID</label>
+            <input type="text" id="voterId" name="voterId" required placeholder="Enter your Voter ID">
+            <div id="voterIdError" class="error"></div>
+            <button type="submit">Validate Voter ID</button>
+        </form>
+    </div>
+
+    <div id="registrationSection" class="container hidden">
+        <h1>Create Voter Account</h1>
+        <form id="registrationForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Create username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create strong password" required>
+
+            <label for="state">Select Your State</label>
+            <select id="state" name="state" onchange="updateConstituencies()" required>
+                <option value="" disabled selected>Select your state</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <!-- Add all Indian states here -->
+            </select>
+
+            <label for="constituency">Select Your Constituency</label>
+            <select id="constituency" name="constituency" required>
+                <option value="" disabled selected>Select your constituency</option>
+            </select>
+
+            <label for="mobileNumber">Mobile Number</label>
+            <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Enter your mobile number" required>
+
+            <div id="registrationError" class="error"></div>
+            <div id="registrationSuccess" class="success hidden">Account successfully created!</div>
+
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+
+    <script>
+        const constituencies = {
+            "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam"],
+            "Bihar": ["Arrah", "Aurangabad", "Begusarai", "Bhagalpur", "Buxar", "Darbhanga", "Gaya"],
+            "Delhi": ["Chandni Chowk", "East Delhi", "New Delhi", "North East Delhi", "North West Delhi"],
+            "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Jamnagar"],
+            "Karnataka": ["Bagalkot", "Ballari", "Bangalore Central", "Bangalore North", "Bangalore Rural"],
+            "Maharashtra": ["Mumbai South", "Mumbai North", "Nagpur", "Nashik", "Pune", "Shirdi"],
+            "Punjab": ["Amritsar", "Bathinda", "Faridkot", "Ferozepur", "Gurdaspur", "Hoshiarpur"],
+            "Tamil Nadu": ["Chennai Central", "Coimbatore", "Dharmapuri", "Kancheepuram", "Madurai", "Salem"],
+        };
+
+        // Function to update constituencies based on selected state
+        function updateConstituencies() {
+            const state = document.getElementById('state').value;
+            const constituencySelect = document.getElementById('constituency');
+            constituencySelect.innerHTML = '<option value="" disabled selected>Select your constituency</option>';
+            
+            if (state && constituencies[state]) {
+                constituencies[state].forEach(constituency => {
+                    const option = document.createElement('option');
+                    option.value = constituency;
+                    option.textContent = constituency;
+                    constituencySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Voter ID validation: Alphanumeric and length 10-12 characters (example rule)
+        function validateVoterId(voterId) {
+            const voterIdPattern = /^[A-Za-z0-9]{10,12}$/;  // Alphanumeric, 10-12 characters
+            return voterIdPattern.test(voterId);
+        }
+
+        // Voter ID form submission
+        document.getElementById('voterIdForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const voterId = document.getElementById('voterId').value;
+            const voterIdErrorDiv = document.getElementById('voterIdError');
+
+            // Validate Voter ID
+            if (!validateVoterId(voterId)) {
+                voterIdErrorDiv.textContent = "Invalid Voter ID. It must be alphanumeric and 10-12 characters long.";
+                return;
+            }
+
+            // Hide the Voter ID section and show the registration form
+            document.getElementById('voterIdSection').classList.add('hidden');
+            document.getElementById('registrationSection').classList.remove('hidden');
+        });
+
+        // Registration form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Here you would add your backend submission logic
+            // For demonstration purposes, we'll show a success message
+            document.getElementById('registrationSuccess').classList.remove('hidden');
+            document.getElementById('registrationError').classList.add('hidden');
+        });
+    </script>
+
+</body>
+</html>

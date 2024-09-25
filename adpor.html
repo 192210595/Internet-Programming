@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Election Commission of India</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .form-container {
+            margin-bottom: 30px;
+        }
+
+        .form-container h2 {
+            margin-bottom: 15px;
+            color: #2980b9;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="date"],
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+    <script>
+        // Function to dynamically add party IDs to the candidate form
+        function loadPartyIDs() {
+            fetch('fetch.php') // Fetch party IDs from the server
+                .then(response => response.json()) // Parse the JSON data
+                .then(data => {
+                    const partyDropdown = document.getElementById('partyID');
+                    partyDropdown.innerHTML = "<option value=''>Select a Party ID</option>"; // Reset dropdown
+                    data.forEach(party => {
+                        const option = document.createElement('option');
+                        option.value = party.partyID;
+                        option.textContent = party.partyID + " - " + party.partyName;
+                        partyDropdown.appendChild(option); // Append each partyID to the dropdown
+                    });
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadPartyIDs(); // Load Party IDs when the page loads
+
+            const addPartyForm = document.getElementById('addPartyForm');
+            addPartyForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(addPartyForm);
+
+                fetch('addparty.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    addPartyForm.reset(); // Clear the form
+                    loadPartyIDs(); // Reload Party IDs after adding a new party
+                });
+            });
+        });
+
+        const statesAndConstituencies = {
+            "Andhra Pradesh": ["Amaravati", "Visakhapatnam", "Vijayawada", "Guntur", "Kakinada"],
+            "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat"],
+            // Add more states and constituencies as needed
+        };
+
+        // Function to update constituencies for the party form
+        function updateConstituencies() {
+            const stateSelect = document.getElementById("state");
+            const constituencySelect = document.getElementById("constituency");
+            const selectedState = stateSelect.value;
+
+            // Reset the constituency dropdown
+            constituencySelect.innerHTML = "<option value=''>Select Constituency</option>";
+
+            // Populate the constituency dropdown if a state is selected and exists in the dictionary
+            if (selectedState && statesAndConstituencies[selectedState]) {
+                statesAndConstituencies[selectedState].forEach(constituency => {
+                    const option = document.createElement("option");
+                    option.value = constituency;
+                    option.textContent = constituency;
+                    constituencySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Function to update constituencies for the voter form
+        function updateVoterConstituencies() {
+            const stateSelect = document.getElementById("voter_state");
+            const constituencySelect = document.getElementById("voter_constituency");
+            const selectedState = stateSelect.value;
+
+            // Reset the constituency dropdown
+            constituencySelect.innerHTML = "<option value=''>Select Constituency</option>";
+
+            // Populate the constituency dropdown if a state is selected and exists in the dictionary
+            if (selectedState && statesAndConstituencies[selectedState]) {
+                statesAndConstituencies[selectedState].forEach(constituency => {
+                    const option = document.createElement("option");
+                    option.value = constituency;
+                    option.textContent = constituency;
+                    constituencySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Election Commission Admin Portal</h1>
+
+        <!-- Add Party Form -->
+        <div class="form-container">
+            <h2>Add Political Party</h2>
+            <form method="POST" action="addparty.php" id="addPartyForm">
+                <input type="text" name="party_name" placeholder="Party Name" required>
+                <input type="text" name="symbol" placeholder="Symbol Name" required>
+                <input type="text" name="partyID" placeholder="Party ID" required>
+                <select id="state" name="state" onchange="updateConstituencies()" required>
+                    <option value="">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <!-- Add more states as needed -->
+                </select>
+
+                <select id="constituency" name="constituency" required>
+                    <option value="">Select Constituency</option>
+                </select>
+
+                <button type="submit" name="add_party">Add Party</button>
+            </form>
+            <!-- Button to Check All Parties and Candidates -->
+            <button onclick="window.location.href='showparties.php'">View All Parties and Candidates</button>
+        </div>
+
+        <!-- Party and Candidate Table -->
+        <h2>Add Candidates</h2>
+        <form method="POST" action="add_cand.php">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select Party</th>
+                        <th>Candidate ID</th>
+                        <th>Candidate Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select name="partyID" id="partyID" required>
+                                <option value="">Select a Party ID</option>
+                                <!-- Party IDs will be loaded here dynamically -->
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="candidateID" placeholder="Candidate ID" required>
+                        </td>
+                        <td>
+                            <input type="text" name="candidate_name" placeholder="Candidate Name" required>
+                        </td>
+                        <td>
+                            <button type="submit" name="add_candidate">Add Candidate</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <!-- Add Voter Form -->
+        <div class="form-container">
+            <h2>Add Voter</h2>
+            <form method="POST" action="addvoter.php">
+                <input type="text" name="voterID" placeholder="Voter ID" required>
+                <input type="text" name="name" placeholder="Voter Name" required>
+
+                <label for="voter_state">Select State:</label>
+                <select id="voter_state" name="voter_state" onchange="updateVoterConstituencies()" required>
+                    <option value="">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <!-- Add more states as needed -->
+                </select>
+
+                <label for="voter_constituency">Select Constituency:</label>
+                <select id="voter_constituency" name="voter_constituency" required>
+                    <option value="">Select Constituency</option>
+                </select>
+
+                <input type="text" name="mobile" placeholder="Mobile No." required>
+                <button type="submit" name="add_voter">Add Voter</button>
+            </form>
+        </div>
+
+        <!-- View Voter Details -->
+        <div class="form-container">
+            <h2>View Voter Details</h2>
+            <button onclick="window.location.href='showvoters.php'">View All Voter Details</button>
+        </div>
+
+       
+   
+</body>
+</html>
+

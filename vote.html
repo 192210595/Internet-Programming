@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for Your Party</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('m.jpg'); /* Add a background */
+            background-size: cover;
+            Background-repeat:no-repeat;
+        }
+
+        h1 {
+            color: #1c64f2;
+            font-size: 36px;
+            margin-top: 20px;
+        }
+
+        .quote {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .party-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .party-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .party-card:hover {
+            transform: scale(1.05);
+        }
+
+        .party-symbol {
+            width: 100px;
+            height: 100px;
+        }
+
+        .party-name {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #1c64f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1554c0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Select Your Party</h1>
+    <p class="quote">"Choose wisely for the future of India"</p>
+
+    <!-- Party List Section -->
+    <div class="party-container" id="partyContainer">
+        <!-- Parties will be loaded here dynamically -->
+    </div>
+
+    <button onclick="submitVote()">Submit Vote</button>
+
+    <script>
+        // Assume the state is stored in localStorage or passed from the previous page
+        const selectedState = localStorage.getItem('selectedState') || 'Andhra Pradesh';
+
+        // Function to fetch and display parties for the selected state
+        function fetchParties(state) {
+            fetch(`/parties/${state}`)
+                .then(response => response.json())
+                .then(data => {
+                    const partyContainer = document.getElementById('partyContainer');
+                    partyContainer.innerHTML = '';  // Clear any existing parties
+
+                    // Dynamically create party cards
+                    data.forEach(party => {
+                        const partyCard = document.createElement('div');
+                        partyCard.className = 'party-card';
+                        
+                        const partySymbol = document.createElement('img');
+                        partySymbol.src = party.party_symbol;
+                        partySymbol.alt = `${party.party_name} symbol`;
+                        partySymbol.className = 'party-symbol';
+
+                        const partyName = document.createElement('div');
+                        partyName.className = 'party-name';
+                        partyName.textContent = party.party_name;
+
+                        partyCard.appendChild(partySymbol);
+                        partyCard.appendChild(partyName);
+                        partyContainer.appendChild(partyCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching party data:', error);
+                });
+        }
+
+        // Function to handle vote submission
+        function submitVote() {
+            alert('Vote has been submitted!');
+            // You can add logic here to send the vote to the server
+        }
+
+        // Fetch parties when the page loads
+        window.onload = () => fetchParties(selectedState);
+
+    </script>
+
+</body>
+</html>
